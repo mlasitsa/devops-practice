@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-app
+  labels:
+    app: nextjs-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nextjs-app
+  template:
+    metadata:
+      labels:
+        app: nextjs-app
+    spec:
+      imagePullSecrets:            
+        - name: ghcr-pull-secret   
+      containers:
+        - name: nextjs-app
+          image: ghcr.io/mlasitsa/devops-capstone:56bf762
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGODB_CONNECTION_URL2
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-uri-secret
+                  key: MONGODB_URI
